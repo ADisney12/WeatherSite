@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <link rel = "stylesheet" href = "main.css">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 </head>
 <body>
@@ -19,122 +23,8 @@
             <div id="others"> </div>
 
         </div>
+        <a href="https://github.com/ADisney12?tab=repositories"><img src="https://cdn-icons-png.flaticon.com/512/25/25231.png" id="img"></a>
     </div>
-    
 </body>
-<script>
-function grab()
-    {   
-        var input = document.getElementById('search-input').value
-        console.log(input)
-        const options = {
-        method: 'GET',
-        headers: {
-            'X-RapidAPI-Key': '9b0d3f9c88mshfd7b6445f1813e1p1aed44jsn0793638afda0',
-            'X-RapidAPI-Host': 'weatherapi-com.p.rapidapi.com'
-        }
-    };
-    
-    fetch('https://weatherapi-com.p.rapidapi.com/forecast.json?q=' + input, options)
-        .then(response => response.json())
-        .then(response => {
-            var data_location = (response.location.name + " " +  response.location.region)
-            var wind_mph = (response.current.wind_mph)
-            var temp_f = (response.current.temp_f)
-            var feelslike_f = (response.current.feelslike_f)
-            var precip_in = (response.current.precip_in)
-            var humidity = (response.current.humidity)
-            var maxtemp_f = response.forecast.forecastday[0].day.maxtemp_f
-            var mintemp_f = response.forecast.forecastday[0].day.mintemp_f
-            var kind = (response.current.condition.text)
-            var list = [data_location, wind_mph, temp_f, feelslike_f, precip_in, humidity, kind, maxtemp_f, mintemp_f]
-            console.log(list)
-            show(list)
-        })
-    
-        .catch(err => console.error(err));
-    }
-    
-    function show(list){
-        var city = document.getElementById('city');
-        var temp = document.getElementById('temp');
-        var kind = document.getElementById('kind');
-        var high_low = document.getElementById('high-low');
-        var others = document.getElementById('others');
-    
-        city.innerHTML = "";
-        kind.innerHTML = "";
-        temp.innerHTML = "";
-        high_low.innerHTML = "";
-        others.innerHTML = "";
-    
-        city.append(list[0])
-        
-        kind.append(list[6])
-        
-        temp.append(list[2] + " feels like " + list[3])
-    
-        high_low.append("high: "+ list[7])
-        high_low.append(document.createElement('br'));
-        high_low.append("low: " + list[8])
-    
-        others.append("windspeed: " + list[1] + "mph   precipitation: " + list[4] + "in. humidity: " + list[5] + "%") 
-      
-}
-    </script>
+<script src = "main.js"></script>
 </html>
-
-<style>
-    #backround {
-    text-align: center;
-    background: linear-gradient(10deg, rgb(194, 192, 235) 0%, rgb(90, 149, 238) 35%, rgba(194,245,255,1) 100%);
-    position:absolute;
-    top:0px;
-    right:0px;
-    bottom:0px;
-    left:0px;
-    font-size: 20px;
-  }
-  
-  #search-input{
-    border-radius: 20px;
-    width: 40%;
-    margin-top: 10%;
-    
-  }
-  
-  #button{
-    border-radius: 20px;
-  }
-  #container{
-    margin-left: 20%;
-    background-color: aliceblue;
-    width: 60%;
-    height: 70%;
-  
-  }
-  #city{
-    font-size: 300%;
-  }
-
-  #kind{
-    font-size: 150%;
-  }
-  #temp{
-    font-size: 150%;
-    padding-top: 3%;
-  }
-  #high-low{
-    padding-top: 3%;
-    font-size: 150%;
-  }
-
-  #others{
-    padding-top: 3%;
-  }
-  #img{
-    width: 10%;
-    padding-top: 4%;;
-  }
-
-</style>
