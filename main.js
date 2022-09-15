@@ -1,69 +1,82 @@
+$(document).ready(function(){
+    watch_id = 0;
 
+    $("form").submit(function(event){
+        event.preventDefault()
 
-function grab()
-{   
-    var input = document.getElementById('search-input').value
-    console.log(input)
-    const options = {
-    method: 'GET',
-    headers: {
-        'X-RapidAPI-Key': '9b0d3f9c88mshfd7b6445f1813e1p1aed44jsn0793638afda0',
-        'X-RapidAPI-Host': 'weatherapi-com.p.rapidapi.com'
-    }
-};
+        let key = "AIzaSyDYtIKaGzFczw7u5-ZN3L2hQbAF-UJJpJs"
 
-fetch('https://weatherapi-com.p.rapidapi.com/forecast.json?q=' + input, options)
-    .then(response => response.json())
-    .then(response => {
-        var data_location = (response.location.name + " " +  response.location.region)
-        var wind_mph = (response.current.wind_mph)
-        var temp_f = (response.current.temp_f)
-        var feelslike_f = (response.current.feelslike_f)
-        var precip_in = (response.current.precip_in)
-        var humidity = (response.current.humidity)
-        var maxtemp_f = response.forecast.forecastday[0].day.maxtemp_f
-        var mintemp_f = response.forecast.forecastday[0].day.mintemp_f
-        var kind = (response.current.condition.text)
-        var list = [data_location, wind_mph, temp_f, feelslike_f, precip_in, humidity, kind, maxtemp_f, mintemp_f]
-        console.log(list)
-        show(list)
+        let video =''
+
+        var search = $("#search").val()
+        videoSearch(key,search,10,video)
     })
+    function videoSearch(key,search,maxresults,video){
+        $("#vids").innerText = "";
+        
+        $.get("https://www.googleapis.com/youtube/v3/search?key="+ key + 
+        "&type=video&part=snippet&maxResults=" + maxresults + "&q=" + search, (data) => {
+            console.log(data)
 
-    .catch(err => console.error(err));
-}
+            data.items.forEach(element => {
+                video = '<iframe width = "420" height = "315"  src="http://www.youtube.com/embed/${item.id.videoId}" frameborder = "0" allowfullscreen></iframe>'
+                let id = element.id.videoId;
+                let date_published = JSON.stringify(element.snippet.publishedAt, undefined, 2);
+                let title = JSON.stringify(element.snippet.title, undefined, 2);
+                let thumbnsil = element.snippet.thumbnails.default.url;
+                let pic = document.createElement('img');
+                pic.src = thumbnsil;
+                pic.height = 200;
+                pic.width = 300;
 
-function show(list){
-    var city = document.getElementById('city');
-    var temp = document.getElementById('temp');
-    var kind = document.getElementById('kind');
-    var high_low = document.getElementById('high-low');
-    var others = document.getElementById('others');
+                
 
-    city.innerHTML = "";
-    kind.innerHTML = "";
-    temp.innerHTML = "";
-    high_low.innerHTML = "";
-    others.innerHTML = "";
+                let vid_holder = document.createElement('div');
+                vid_holder.innerHTML = "";
+                vid_holder.append(pic);
 
-    city.append(list[0])
+                vid_holder.append(document.createElement('br'));
+
+                vid_holder.append(title);
+        
+                vid_holder.append(document.createElement('br'));
+                let watch = document.createElement('button');
+              
+                watch.textContent = 'watch';
+
+                watch.id = "watch";
+               
+                watch.className = "btn btn-danger";
+            
+                watch.onclick =  () => {
+                    // let contain = document.getElementById('contain');
+                    // contain.innerHTML = '';
+                    // let frame = document.createElement('iframe');
+                    // frame.id = "frame";
+                    // frame.src = 'http://www.youtube.com/embed/' + id;
+                    // frame.width = 1000;
+                    // frame.height = 800                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 ;
+                    // contain.append(frame)
+                    location.href = 'http://www.youtube.com/embed/' + id;
+                
+                };
+
+                
+                vid_holder.append(watch);
+
+                
+                 
+                $("#vids").append(vid_holder)
+                let br = document.createElement('br');
+                $("#vids").append(br)
+
+
+            });
+
     
-    kind.append(list[6])
-    
-    temp.append(list[2] + " feels like " + list[3])
 
-    high_low.append("high: "+ list[7])
-    high_low.append(document.createElement('br'));
-    high_low.append("low: " + list[8])
+                                                     
+        })
 
-    others.append("windspeed: " + list[1] + "mph   precipitation: " + list[4] + "in. humidity: " + list[5] + "%") 
-
-
-
-    
-}
-
-
-
-   
-
- 
+    }
+})                                  
